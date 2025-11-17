@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GameData
   m_EditorClassIdentifier: 
   StartBallSpeed: 10
+  PlatformSpeed: 3

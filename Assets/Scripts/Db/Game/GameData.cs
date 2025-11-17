@@ -6,5 +6,6 @@ namespace Db.Game
     public class GameData : ScriptableObject
     {
         [field: SerializeField] public float StartBallSpeed;
+        [field: SerializeField] public float PlatformSpeed;
     }
 }
