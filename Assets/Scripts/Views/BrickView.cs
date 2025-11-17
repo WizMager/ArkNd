@@ -1,25 +1,20 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Utils;
 
 namespace Views
 {
     public class BrickView : MonoBehaviour
     {
-        [SerializeField] private SpriteRenderer _renderer;
+        public Action<BrickView> OnBrickTouched;
         
-        private int _hitPoints;
-        private MaterialPropertyBlock _propertyBlock;
+        [SerializeField] private SpriteRenderer _renderer;
 
-        public int HitPoints => _hitPoints;
-
-        private void Awake()
-        {
-            _propertyBlock ??= new MaterialPropertyBlock();
-        }
+        public int HitPoints { get; private set; }
 
         public void Initialize(BrickData data)
         {
-            _hitPoints = data.HitPoints;
+            HitPoints = data.HitPoints;
 
             if (_renderer == null)
             {
@@ -27,6 +22,14 @@ namespace Views
             }
 
             _renderer.color = data.Color;
+        }
+
+        private void OnCollisionEnter2D(Collision2D other)
+        {
+            if (other.gameObject.layer != LayerMask.NameToLayer("Ball"))
+                return;
+            
+            OnBrickTouched?.Invoke(this);
         }
     }
 }

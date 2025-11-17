@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Ball.Impl;
+using Bricks.Impl;
 using Core;
 using Core.Interfaces;
 using Db;
@@ -42,6 +43,9 @@ public class Bootstrap : MonoBehaviour
 
         var platformMoveModule = new PlatformMoveModule(_inputService, _platform, _gameData);
         modules.Add(platformMoveModule);
+
+        var bricksModule = new BricksModule(_bricksService);
+        modules.Add(bricksModule);
         
         _modulesHandler = new ModulesHandler(modules);
         

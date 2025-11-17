@@ -1,6 +1,6 @@
 ﻿namespace Bricks
 {
-    public interface IBricksSpawnModule
+    public interface IBricksModule
     {
         
     }
