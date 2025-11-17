@@ -209,7 +209,7 @@ GameObject:
   - component: {fileID: 95284910}
   - component: {fileID: 95284912}
   - component: {fileID: 95284913}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -344,6 +344,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0770deefe89e46d393703eff94225106, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  <Collider>k__BackingField: {fileID: 95284912}
 --- !u!1 &385795062
 GameObject:
   m_ObjectHideFlags: 0
@@ -819,7 +820,7 @@ GameObject:
   - component: {fileID: 1231721145}
   - component: {fileID: 1231721144}
   - component: {fileID: 1231721148}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: Ball
   m_TagString: Untagged
   m_Icon: {fileID: 0}

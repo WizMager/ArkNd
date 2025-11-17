@@ -12,5 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 453ffc4bdfa44dbd93ad19d4b0a22a43, type: 3}
   m_Name: GameData
   m_EditorClassIdentifier: 
-  StartBallSpeed: 10
+  DefaultBallSpeed: 10
   PlatformSpeed: 3
+  MaxReflectAngle: 75

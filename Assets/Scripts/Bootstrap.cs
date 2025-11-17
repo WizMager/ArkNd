@@ -37,7 +37,7 @@ public class Bootstrap : MonoBehaviour
         _inputService = new InputService();
         _inputService.Initialize();
 
-        var ballMove = new BallMoveModule(_ball, _gameData);
+        var ballMove = new BallReflectModule(_ball, _gameData, _platform);
         modules.Add(ballMove);
 
         var platformMoveModule = new PlatformMoveModule(_inputService, _platform, _gameData);
