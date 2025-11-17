@@ -3,7 +3,7 @@ using Utils;
 
 namespace Views
 {
-    public class Brick : MonoBehaviour
+    public class BrickView : MonoBehaviour
     {
         [SerializeField] private SpriteRenderer _renderer;
         

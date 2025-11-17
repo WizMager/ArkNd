@@ -10,7 +10,7 @@ namespace Services.Bricks.Impl
     {
         private readonly LevelData _database;
         private readonly Transform _root;
-        private readonly List<Brick> _spawnedBricks = new();
+        private readonly List<BrickView> _spawnedBricks = new();
         private readonly PrefabData _prefabData;
 
         public BricksService(LevelData database, PrefabData prefabData, Transform root = null)
@@ -20,7 +20,7 @@ namespace Services.Bricks.Impl
             _root = root != null ? root : new GameObject("BricksRoot").transform;
         }
 
-        public IReadOnlyList<Brick> SpawnedBricks => _spawnedBricks;
+        public IReadOnlyList<BrickView> SpawnedBricks => _spawnedBricks;
 
         public void BuildLevel(int levelIndex)
         {
@@ -29,7 +29,7 @@ namespace Services.Bricks.Impl
 
             foreach (var info in level.EnumerateBricks())
             {
-                var instance = Object.Instantiate(_prefabData.Brick, _root);
+                var instance = Object.Instantiate(_prefabData.BrickView, _root);
                 instance.transform.localPosition = level.GetLocalPosition(info.Column, info.Row);
                 instance.Initialize(info.Data);
                 _spawnedBricks.Add(instance);

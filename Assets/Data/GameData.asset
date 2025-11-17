@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 90e39b15c6a646d2b31b3a2bce5b7a09, type: 3}
-  m_Name: PrefabData
+  m_Script: {fileID: 11500000, guid: 453ffc4bdfa44dbd93ad19d4b0a22a43, type: 3}
+  m_Name: GameData
   m_EditorClassIdentifier: 
-  <BrickView>k__BackingField: {fileID: 1934644833176179839, guid: 521660df00b31bf4db4ec30562e65a7a, type: 3}
+  StartBallSpeed: 10

@@ -5,7 +5,7 @@ namespace Services.Bricks
 {
     public interface IBricksService
     {
-        IReadOnlyList<Brick> SpawnedBricks { get; }
+        IReadOnlyList<BrickView> SpawnedBricks { get; }
         void BuildLevel(int levelIndex);
         void ClearField();
     }
