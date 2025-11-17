@@ -29,6 +29,7 @@ namespace Bricks.Impl
         {
             var health = _bricksHealth[brick];
             health--;
+            _bricksHealth[brick] = health;
             
             if (health > 0) 
                 return;
