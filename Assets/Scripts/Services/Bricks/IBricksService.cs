@@ -8,5 +8,6 @@ namespace Services.Bricks
         IReadOnlyList<BrickView> SpawnedBricks { get; }
         void BuildLevel(int levelIndex);
         void ClearField();
+        void ReleaseBrick(BrickView brickView);
     }
 }

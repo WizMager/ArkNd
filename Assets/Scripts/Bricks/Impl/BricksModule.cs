@@ -5,11 +5,10 @@ using Db.Game;
 using Services.Bricks;
 using UnityEngine;
 using Views;
-using Object = UnityEngine.Object;
 
 namespace Bricks.Impl
 {
-    public class BricksModule : IBricksModule, IAwakable, IStartable
+    public class BricksModule : IBricksModule, IAwakable, IStartable, IDisposable
     {
         private readonly IBricksService _bricksService;
         private readonly Dictionary<BrickView, int> _bricksHealth = new();
@@ -39,8 +38,7 @@ namespace Bricks.Impl
             
             foreach (var brick in _bricksService.SpawnedBricks)
             {
-                _bricksHealth.Add(brick, brick.HitPoints);
-                brick.OnBrickTouched += OnBrickTouched;
+                RegisterBrick(brick);
             }
         }
 
@@ -64,7 +62,24 @@ namespace Bricks.Impl
             
             _bricksHealth.Remove(brick);
             
-            Object.Destroy(brick.gameObject);
+            _bricksService.ReleaseBrick(brick);
+        }
+
+        private void RegisterBrick(BrickView brick)
+        {
+            if (brick == null) 
+                return;
+            
+            _bricksHealth[brick] = brick.HitPoints;
+            brick.OnBrickTouched += OnBrickTouched;
+        }
+
+        public void Dispose()
+        {
+            foreach (var brick in _bricksHealth.Keys)
+            {
+                brick.OnBrickTouched -= OnBrickTouched;
+            }
         }
     }
 }
