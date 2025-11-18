@@ -67,7 +67,7 @@ public class Bootstrap : MonoBehaviour
         var platformMoveModule = new PlatformMoveModule(_inputService, _platform, _gameData, _powerUpModule, _powerUpData);
         modules.Add(platformMoveModule);
         
-        var attackModule = new AttackModule(_ball, _inputService, _loseLineView, _gameData);
+        var attackModule = new AttackModule(_ball, _inputService, _loseLineView, _gameData, _bricksService);
         modules.Add(attackModule);
         
         var loseModule = new WinLoseModule(_loseLineView, _ball, _platform, _bricksService);

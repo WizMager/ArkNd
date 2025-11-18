@@ -47,6 +47,9 @@ namespace Ball.Impl
 
         private void OnReflected(Vector2 normal)
         {
+            if (_ball.transform.parent != null)
+                return;
+            
             if (_collisionFrame != Time.frameCount)
             {
                 _collisionFrame = Time.frameCount;
@@ -89,6 +92,9 @@ namespace Ball.Impl
 
         private void OnPlatformReflected(Vector2 contactPoint)
         {
+            if (_ball.transform.parent != null)
+                return;
+            
             if (!_isReadyForReflect)
                 return;
             
