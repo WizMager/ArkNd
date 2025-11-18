@@ -9,6 +9,8 @@ namespace Views
         
         [field:SerializeField] public Transform BallPosition { get; private set; }
         [field:SerializeField] public BoxCollider2D Collider { get; private set; }
+        [field:SerializeField] public Collider2D LeftBoundary { get; private set; }
+        [field:SerializeField] public Collider2D RightBoundary { get; private set; }
 
         private void OnCollisionEnter2D(Collision2D other)
         {

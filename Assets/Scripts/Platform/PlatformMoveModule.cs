@@ -64,7 +64,35 @@ namespace Platform
                 return;
             
             var direction = _inputService.MoveDirection;
-            _platformTransform.Translate(Vector3.right * direction * Time.deltaTime * _gameData.PlatformSpeed);
+            
+            if (Mathf.Approximately(direction, 0f))
+                return;
+
+            var delta = Vector3.right * direction * Time.deltaTime * _gameData.PlatformSpeed;
+            var targetPosition = _platformTransform.position + delta;
+
+            targetPosition.x = Mathf.Clamp(targetPosition.x, GetLeftLimit(), GetRightLimit());
+            _platformTransform.position = targetPosition;
+        }
+
+        private float GetLeftLimit()
+        {
+            if (_platformView.LeftBoundary == null)
+                return float.NegativeInfinity;
+
+            var boundaryMaxX = _platformView.LeftBoundary.bounds.max.x;
+            var halfWidth = _platformView.Collider.bounds.extents.x;
+            return boundaryMaxX + halfWidth;
+        }
+
+        private float GetRightLimit()
+        {
+            if (_platformView.RightBoundary == null)
+                return float.PositiveInfinity;
+
+            var boundaryMinX = _platformView.RightBoundary.bounds.min.x;
+            var halfWidth = _platformView.Collider.bounds.extents.x;
+            return boundaryMinX - halfWidth;
         }
     }
 }
