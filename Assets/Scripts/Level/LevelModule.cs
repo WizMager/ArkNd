@@ -1,10 +1,11 @@
-﻿using Core.Interfaces;
+﻿using System;
+using Core.Interfaces;
 using Db;
 using Services.Bricks;
 
 namespace Level
 {
-    public class LevelModule : IStartable
+    public class LevelModule : IStartable, IDisposable
     {
         private readonly IBricksService _bricksService;
         private readonly LevelData _levelData;
@@ -36,6 +37,11 @@ namespace Level
             }
             
             _bricksService.BuildLevel(_level);
+        }
+        
+        public void Dispose()
+        {
+            _bricksService.OnBricksDestroyed -= OnBricksDestroyed;
         }
     }
 }

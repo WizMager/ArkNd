@@ -2,7 +2,7 @@
 
 namespace Services.Input
 {
-    public interface IInputService
+    public interface IInputService : IDisposable
     {
         Action<bool> OnAttack { get; set; }
         bool IsMove { get; }

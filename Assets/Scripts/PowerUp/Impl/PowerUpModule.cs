@@ -12,7 +12,7 @@ using Object = UnityEngine.Object;
 
 namespace PowerUp.Impl
 {
-    public class PowerUpModule : IPowerUpModule, IStartable, IUpdatable
+    public class PowerUpModule : IPowerUpModule, IStartable, IUpdatable, IDisposable
     {
         private readonly IBricksModule _bricksModule;
         private readonly PrefabData _prefabData;
@@ -134,6 +134,11 @@ namespace PowerUp.Impl
             var entry = _activePowerUps[index];
             _activePowerUps.RemoveAt(index);
             _powerUpPool.Release(entry.View);
+        }
+        
+        public void Dispose()
+        {
+            _bricksModule.OnPowerUp -= OnPowerUpHandle;
         }
     }
 }

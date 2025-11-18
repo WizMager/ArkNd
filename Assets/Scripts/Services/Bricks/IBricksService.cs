@@ -6,7 +6,7 @@ namespace Services.Bricks
 {
     public interface IBricksService
     {
-        Action OnBricksDestroyed { get; set; }
+        event Action OnBricksDestroyed;
         IReadOnlyList<BrickView> SpawnedBricks { get; }
         
         void BuildLevel(int levelIndex);

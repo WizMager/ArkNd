@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Ball.Impl;
 using Bricks;
 using Bricks.Impl;
@@ -93,5 +94,16 @@ public class Bootstrap : MonoBehaviour
     private void Update()
     {
         _modulesHandler.Update();
+    }
+    
+    private void OnDestroy()
+    {
+        _modulesHandler?.Dispose();
+        _inputService?.Dispose();
+        
+        if (_forCoroutine != null)
+        {
+            Destroy(_forCoroutine.gameObject);
+        }
     }
 }

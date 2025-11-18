@@ -52,6 +52,7 @@ namespace Lose
         public void Dispose()
         {
             _loseLineView.OnLose -= OnLost;
+            _bricksService.OnBricksDestroyed -= OnWin;
         }
     }
 }

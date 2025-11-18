@@ -1,4 +1,5 @@
-﻿using Core.Interfaces;
+﻿using System;
+using Core.Interfaces;
 using Db.Game;
 using Db.PowerUp;
 using PowerUp;
@@ -8,7 +9,7 @@ using Views;
 
 namespace Platform
 {
-    public class PlatformMoveModule : IStartable, IUpdatable
+    public class PlatformMoveModule : IStartable, IUpdatable, IDisposable
     {
         private readonly IInputService _inputService;
         private readonly Transform _platformTransform;
@@ -76,22 +77,27 @@ namespace Platform
 
         private float GetLeftLimit()
         {
-            if (_platformView.LeftBoundary == null)
-                return float.NegativeInfinity;
-
-            var boundaryMaxX = _platformView.LeftBoundary.bounds.max.x;
-            var halfWidth = _platformView.Collider.bounds.extents.x;
-            return boundaryMaxX + halfWidth;
+            return GetBoundaryLimit(_platformView.LeftBoundary, true);
         }
 
         private float GetRightLimit()
         {
-            if (_platformView.RightBoundary == null)
-                return float.PositiveInfinity;
+            return GetBoundaryLimit(_platformView.RightBoundary, false);
+        }
+        
+        private float GetBoundaryLimit(BoxCollider2D boundary, bool isLeft)
+        {
+            if (boundary == null)
+                return isLeft ? float.NegativeInfinity : float.PositiveInfinity;
 
-            var boundaryMinX = _platformView.RightBoundary.bounds.min.x;
             var halfWidth = _platformView.Collider.bounds.extents.x;
-            return boundaryMinX - halfWidth;
+            var boundaryX = isLeft ? boundary.bounds.max.x : boundary.bounds.min.x;
+            return isLeft ? boundaryX + halfWidth : boundaryX - halfWidth;
+        }
+        
+        public void Dispose()
+        {
+            _powerUpModule.OnPowerUpCollected -= OnPowerUpCollected;
         }
     }
 }

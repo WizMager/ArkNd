@@ -26,20 +26,13 @@ namespace Services.Input.Impl
 
         private void OnMovePerformed(InputAction.CallbackContext context)
         {
-            if (!IsMove)
-            {
-                IsMove = true;
-            }
-            
+            IsMove = true;
             MoveDirection = context.ReadValue<Vector2>().x;
         }
         
         private void OnMoveCanceled(InputAction.CallbackContext obj)
         {
-            if (IsMove)
-            {
-                IsMove = false;
-            }
+            IsMove = false;
         }
 
         private void OnAttackPerform(InputAction.CallbackContext obj)

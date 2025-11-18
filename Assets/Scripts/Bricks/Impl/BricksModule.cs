@@ -104,6 +104,8 @@ namespace Bricks.Impl
 
         public void Dispose()
         {
+            _bricksService.OnBricksDestroyed -= OnBricksDestroyed;
+            
             foreach (var brick in _bricksHealth.Keys)
             {
                 brick.OnBrickTouched -= OnBrickTouched;

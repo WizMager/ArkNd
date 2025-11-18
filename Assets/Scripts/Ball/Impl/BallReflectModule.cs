@@ -141,8 +141,8 @@ namespace Ball.Impl
         {
             _ball.OnTouch -= OnReflected;
             _platformView.OnPlatformReflect -= OnPlatformReflected;
-            _inputService.OnAttack += OnAttack;
-            _loseLineView.OnLose += OnLost;
+            _inputService.OnAttack -= OnAttack;
+            _loseLineView.OnLose -= OnLost;
         }
     }
 }

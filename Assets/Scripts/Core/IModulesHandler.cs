@@ -1,8 +1,9 @@
-﻿using Core.Interfaces;
+﻿using System;
+using Core.Interfaces;
 
 namespace Core
 {
-    public interface IModulesHandler
+    public interface IModulesHandler : IDisposable
     {
         void AddModule(IModule module);
         void RemoveModule(IModule module);

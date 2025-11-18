@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Core.Interfaces;
 
 namespace Core
@@ -9,6 +10,7 @@ namespace Core
         private readonly List<IStartable> _startables = new();
         private readonly List<IUpdatable> _updatables = new();
         private readonly List<IFixedUpdatable> _fixedUpdatables = new();
+        private readonly List<IModule> _allModules = new();
 
         public ModulesHandler(List<IModule> modules)
         {
@@ -30,6 +32,8 @@ namespace Core
         
         private void RegisterModule(IModule module)
         {
+            _allModules.Add(module);
+            
             if (module is IAwakable awakable)
             {
                 _awakables.Add(awakable);
@@ -53,6 +57,8 @@ namespace Core
         
         private void UnregisterModule(IModule module)
         {
+            _allModules.Remove(module);
+            
             if (module is IAwakable awakable)
             {
                 _awakables.Remove(awakable);
@@ -104,6 +110,23 @@ namespace Core
             {
                 fixedUpdatable.FixedUpdate();
             }
+        }
+        
+        public void Dispose()
+        {
+            foreach (var module in _allModules)
+            {
+                if (module is IDisposable disposable)
+                {
+                    disposable.Dispose();
+                }
+            }
+            
+            _allModules.Clear();
+            _awakables.Clear();
+            _startables.Clear();
+            _updatables.Clear();
+            _fixedUpdatables.Clear();
         }
     }
 }

@@ -17,7 +17,7 @@ namespace Services.Bricks.Impl
         private readonly PrefabData _prefabData;
         private readonly ObjectPool<BrickView> _brickPool;
         
-        public Action OnBricksDestroyed { get; set; }
+        public event Action OnBricksDestroyed;
         public IReadOnlyList<BrickView> SpawnedBricks => _spawnedBricks;
 
         public BricksService(LevelData database, PrefabData prefabData, Transform root = null)
