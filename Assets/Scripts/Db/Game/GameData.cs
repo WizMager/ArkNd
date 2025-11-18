@@ -13,5 +13,10 @@ namespace Db.Game
         [Header("Platform Bounce Angles")]
         [field:SerializeField] public float MinBounceAngle = 0f;
         [field:SerializeField] public float MaxBounceAngle = 75f;
+        
+        [Header("Ball Reflection")]
+        [field:SerializeField] public float PenetrationOffset = 0.02f;
+        [field:SerializeField] public float PerpendicularAngleThreshold = 0.1f;
+        [field:SerializeField] public float DeviationAngle = 5f;
     }
 }

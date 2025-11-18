@@ -4,6 +4,7 @@ using Db.Game;
 using Services.Input;
 using UnityEngine;
 using Views;
+using Random = UnityEngine.Random;
 
 namespace Ball.Impl
 {
@@ -16,13 +17,12 @@ namespace Ball.Impl
         private readonly IInputService _inputService;
         private readonly LoseLineView _loseLineView;
         
-        private const float PenetrationOffset = 0.02f;
-        
         private Vector2 _lastVelocity;
         private Vector2 _collisionVelocity;
         private int _collisionFrame = -1;
         private float _halfPlatformWidth;
         private bool _isReadyForReflect;
+        private int _perpendicularReflectionCount;
 
         public BallReflectModule(
             BallView ball, 
@@ -56,19 +56,43 @@ namespace Ball.Impl
             }
 
             var direction = _collisionVelocity.normalized;
+            
+            var dotProduct = Mathf.Abs(Vector2.Dot(direction, normal));
+            var isPerpendicular = dotProduct < _gameData.PerpendicularAngleThreshold;
+            
+            if (isPerpendicular)
+            {
+                _perpendicularReflectionCount++;
+            }
+            else
+            {
+                _perpendicularReflectionCount = 0;
+            }
+            
             var reflected = Vector2.Reflect(direction, normal);
+            
+            if (_perpendicularReflectionCount >= 2)
+            {
+                var deviationDegrees = Random.Range(-_gameData.DeviationAngle, _gameData.DeviationAngle);
+                var rotation = Quaternion.Euler(0, 0, deviationDegrees);
+                reflected = rotation * reflected;
+                _perpendicularReflectionCount = 0;
+            }
+            
             var newVelocity = reflected * _gameData.DefaultBallSpeed;
 
             _collisionVelocity = newVelocity;
             _rigidbody.linearVelocity = newVelocity;
             _lastVelocity = newVelocity;
-            _rigidbody.position += normal * PenetrationOffset;
+            _rigidbody.position += normal * _gameData.PenetrationOffset;
         }
 
         private void OnPlatformReflected(Vector2 contactPoint)
         {
             if (!_isReadyForReflect)
                 return;
+            
+            _perpendicularReflectionCount = 0;
             
             var localContactPoint = _platformView.transform.InverseTransformPoint(contactPoint);
             var relativePosition = localContactPoint.x / _halfPlatformWidth;
@@ -100,6 +124,7 @@ namespace Ball.Impl
         private void OnLost()
         {
             _isReadyForReflect = false;
+            _perpendicularReflectionCount = 0;
         }
         
         public void Awake()
