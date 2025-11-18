@@ -17,9 +17,9 @@ MonoBehaviour:
     _origin: {x: -2.5, y: 4.85}
     _cellSize: {x: 0.5, y: 0.25}
     _rows:
-    - +===+++++++
-    - +++===+++++
-    - ======++++=
+    - -----------
+    - -----------
+    - ----+=-----
     _legend:
     - _symbol: 43
       _isEmpty: 0
@@ -28,6 +28,37 @@ MonoBehaviour:
         _hitPoints: 1
     - _symbol: 61
       _isEmpty: 0
+      _data:
+        _color: {r: 1, g: 0, b: 0, a: 1}
+        _hitPoints: 2
+    - _symbol: 45
+      _isEmpty: 1
+      _data:
+        _color: {r: 1, g: 0, b: 0, a: 1}
+        _hitPoints: 2
+  - _levelIndex: 1
+    _origin: {x: -2.5, y: 4.85}
+    _cellSize: {x: 0.5, y: 0.25}
+    _rows:
+    - +===+++++++
+    - +++===+++++
+    - ======++++=
+    - -----------
+    - -----------
+    - ++++---++++
+    _legend:
+    - _symbol: 43
+      _isEmpty: 0
+      _data:
+        _color: {r: 0.035555363, g: 0.4433962, b: 0.06274473, a: 1}
+        _hitPoints: 1
+    - _symbol: 61
+      _isEmpty: 0
+      _data:
+        _color: {r: 0.5, g: 0.35015506, b: 0.03066039, a: 1}
+        _hitPoints: 2
+    - _symbol: 45
+      _isEmpty: 1
       _data:
         _color: {r: 1, g: 0, b: 0, a: 1}
         _hitPoints: 2

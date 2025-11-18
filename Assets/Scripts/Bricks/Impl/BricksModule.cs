@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Core.Interfaces;
 using Db.Game;
@@ -13,6 +14,7 @@ namespace Bricks.Impl
         private readonly IBricksService _bricksService;
         private readonly Dictionary<BrickView, int> _bricksHealth = new();
         private readonly GameData _gameData;
+        private readonly ForCoroutine _forCoroutine;
 
         private int _powerUpReadyCounter;
         
@@ -20,11 +22,13 @@ namespace Bricks.Impl
         
         public BricksModule(
             IBricksService bricksService, 
-            GameData gameData
+            GameData gameData, 
+            ForCoroutine forCoroutine
         )
         {
             _bricksService = bricksService;
             _gameData = gameData;
+            _forCoroutine = forCoroutine;
         }
 
         public void Awake()
@@ -34,6 +38,7 @@ namespace Bricks.Impl
         
         public void Start()
         {
+            _bricksService.OnBricksDestroyed += OnBricksDestroyed;
             _powerUpReadyCounter = _gameData.DestroyBlockCountPowerUp;
             
             foreach (var brick in _bricksService.SpawnedBricks)
@@ -42,6 +47,28 @@ namespace Bricks.Impl
             }
         }
 
+        private void OnBricksDestroyed()
+        {
+            foreach (var brick in _bricksHealth.Keys)
+            {
+                brick.OnBrickTouched -= OnBrickTouched;
+            }
+
+            _bricksHealth.Clear();
+            
+            _forCoroutine.StartCoroutine(WaitAndAddSpawnedBricks());
+        }
+
+        private IEnumerator WaitAndAddSpawnedBricks()
+        {
+            yield return new WaitForSeconds(0.5f);
+            
+            foreach (var brick in _bricksService.SpawnedBricks)
+            {
+                RegisterBrick(brick);
+            }
+        }
+        
         private void OnBrickTouched(BrickView brick)
         {
             var health = _bricksHealth[brick];
@@ -61,6 +88,7 @@ namespace Bricks.Impl
             }
             
             _bricksHealth.Remove(brick);
+            brick.OnBrickTouched -= OnBrickTouched;
             
             _bricksService.ReleaseBrick(brick);
         }

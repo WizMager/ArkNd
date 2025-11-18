@@ -8,6 +8,7 @@ using Db;
 using Db.Game;
 using Db.PowerUp;
 using Db.Prefabs;
+using Level;
 using Lose;
 using Platform;
 using PowerUp;
@@ -37,9 +38,13 @@ public class Bootstrap : MonoBehaviour
     
     private IBricksService _bricksService;
     private IInputService _inputService;
+
+    private ForCoroutine _forCoroutine;
     
     private void Awake()
     {
+        _forCoroutine = new GameObject("ForCoroutine").AddComponent<ForCoroutine>();
+        
         List<IModule> modules = new();
         
         _bricksService = new BricksService(_levelData, _prefabData);
@@ -50,7 +55,7 @@ public class Bootstrap : MonoBehaviour
         var ballMove = new BallReflectModule(_ball, _gameData, _platform, _inputService, _loseLineView);
         modules.Add(ballMove);
 
-        var bricksModule = new BricksModule(_bricksService, _gameData);
+        var bricksModule = new BricksModule(_bricksService, _gameData, _forCoroutine);
         _bricksModule = bricksModule;
         modules.Add(bricksModule);
 
@@ -64,8 +69,11 @@ public class Bootstrap : MonoBehaviour
         var attackModule = new AttackModule(_ball, _inputService, _loseLineView, _gameData);
         modules.Add(attackModule);
         
-        var loseModule = new LoseModule(_loseLineView, _ball, _platform);
+        var loseModule = new WinLoseModule(_loseLineView, _ball, _platform, _bricksService);
         modules.Add(loseModule);
+        
+        var levelModule = new LevelModule(_bricksService, _levelData);
+        modules.Add(levelModule);
         
         _modulesHandler = new ModulesHandler(modules);
         

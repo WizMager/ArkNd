@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Db;
 using Db.Prefabs;
 using UnityEngine;
 using UnityEngine.Pool;
 using Views;
+using Object = UnityEngine.Object;
 
 namespace Services.Bricks.Impl
 {
@@ -14,6 +16,9 @@ namespace Services.Bricks.Impl
         private readonly List<BrickView> _spawnedBricks = new();
         private readonly PrefabData _prefabData;
         private readonly ObjectPool<BrickView> _brickPool;
+        
+        public Action OnBricksDestroyed { get; set; }
+        public IReadOnlyList<BrickView> SpawnedBricks => _spawnedBricks;
 
         public BricksService(LevelData database, PrefabData prefabData, Transform root = null)
         {
@@ -22,8 +27,6 @@ namespace Services.Bricks.Impl
             _root = root != null ? root : new GameObject("BricksRoot").transform;
             _brickPool = new ObjectPool<BrickView>(CreateBrick, OnBrickTaken, OnBrickReleased);
         }
-
-        public IReadOnlyList<BrickView> SpawnedBricks => _spawnedBricks;
 
         public void BuildLevel(int levelIndex)
         {
@@ -61,6 +64,10 @@ namespace Services.Bricks.Impl
 
             _spawnedBricks.Remove(brickView);
             _brickPool.Release(brickView);
+            if (_spawnedBricks.Count <= 0)
+            {
+                OnBricksDestroyed?.Invoke();
+            }
         }
 
 #region PoolMethods

@@ -1,5 +1,4 @@
-﻿using System;
-using Core.Interfaces;
+﻿using Core.Interfaces;
 using Db.Game;
 using Db.PowerUp;
 using PowerUp;
