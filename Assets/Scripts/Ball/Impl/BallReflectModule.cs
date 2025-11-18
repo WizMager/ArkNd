@@ -1,34 +1,44 @@
 ﻿using System;
 using Core.Interfaces;
 using Db.Game;
+using Services.Input;
 using UnityEngine;
 using Views;
 
 namespace Ball.Impl
 {
-    public class BallReflectModule : IAwakable, IStartable, IFixedUpdatable, IDisposable
+    public class BallReflectModule : IAwakable, IFixedUpdatable, IDisposable
     {
         private readonly BallView _ball;
         private readonly Rigidbody2D _rigidbody;
         private readonly GameData _gameData;
         private readonly PlatformView _platformView;
+        private readonly IInputService _inputService;
+        private readonly LoseLineView _loseLineView;
         
         private Vector2 _lastVelocity;
         private float _halfPlatformWidth;
+        private bool _isReadyForReflect;
 
         public BallReflectModule(
             BallView ball, 
             GameData gameData, 
-            PlatformView platformView
+            PlatformView platformView, 
+            IInputService inputService, 
+            LoseLineView loseLineView
         )
         {
             _ball = ball;
             _rigidbody = ball.Rigidbody;
             _gameData = gameData;
             _platformView = platformView;
+            _inputService = inputService;
+            _loseLineView = loseLineView;
 
             _ball.OnTouch += OnReflected;
             _platformView.OnPlatformReflect += OnPlatformReflected;
+            _inputService.OnAttack += OnAttack;
+            _loseLineView.OnLose += OnLost;
         }
 
         private void OnReflected(Vector2 normal)
@@ -42,6 +52,9 @@ namespace Ball.Impl
 
         private void OnPlatformReflected(Vector2 contactPoint)
         {
+            if (!_isReadyForReflect)
+                return;
+            
             var localContactPoint = _platformView.transform.InverseTransformPoint(contactPoint);
             var relativePosition = localContactPoint.x / _halfPlatformWidth;
             relativePosition = Mathf.Clamp(relativePosition, -1f, 1f);
@@ -64,15 +77,19 @@ namespace Ball.Impl
             _lastVelocity = _rigidbody.linearVelocity;
         }
         
+        private void OnAttack(bool isAttack)
+        {
+            _isReadyForReflect = true;
+        }
+        
+        private void OnLost()
+        {
+            _isReadyForReflect = false;
+        }
+        
         public void Awake()
         {
-            _lastVelocity = Vector2.up * _gameData.DefaultBallSpeed;
             _halfPlatformWidth = _platformView.Collider.bounds.extents.x;
-        }
-
-        public void Start()
-        {
-            _rigidbody.linearVelocity = _lastVelocity;
         }
         
         public void FixedUpdate()
@@ -84,6 +101,8 @@ namespace Ball.Impl
         {
             _ball.OnTouch -= OnReflected;
             _platformView.OnPlatformReflect -= OnPlatformReflected;
+            _inputService.OnAttack += OnAttack;
+            _loseLineView.OnLose += OnLost;
         }
     }
 }

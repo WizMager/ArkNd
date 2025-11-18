@@ -7,5 +7,6 @@ namespace Db.Prefabs
     public class PrefabData : ScriptableObject
     {
         [field:SerializeField] public BrickView BrickView { get; private set; }
+        [field:SerializeField] public PowerUpView PowerUpView { get; private set; }
     }
 }

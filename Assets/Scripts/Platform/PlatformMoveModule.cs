@@ -1,26 +1,61 @@
-﻿using Core.Interfaces;
+﻿using System;
+using Core.Interfaces;
 using Db.Game;
+using Db.PowerUp;
+using PowerUp;
 using Services.Input;
 using UnityEngine;
 using Views;
 
 namespace Platform
 {
-    public class PlatformMoveModule : IUpdatable
+    public class PlatformMoveModule : IStartable, IUpdatable
     {
         private readonly IInputService _inputService;
         private readonly Transform _platformTransform;
         private readonly GameData _gameData;
+        private readonly IPowerUpModule _powerUpModule;
+        private readonly PlatformView _platformView;
+        private readonly PowerUpData _powerUpData;
 
         public PlatformMoveModule(
             IInputService inputService, 
             PlatformView platform, 
-            GameData gameData
+            GameData gameData, 
+            IPowerUpModule powerUpModule, 
+            PowerUpData powerUpData
         )
         {
             _inputService = inputService;
             _gameData = gameData;
+            _powerUpModule = powerUpModule;
+            _powerUpData = powerUpData;
             _platformTransform = platform.transform;
+            _platformView = platform;
+        }
+        
+        public void Start()
+        {
+            _powerUpModule.OnPowerUpCollected += OnPowerUpCollected;
+        }
+
+        private void OnPowerUpCollected(EPowerUp powerUp)
+        {
+            switch (powerUp)
+            {
+                case EPowerUp.AddPlatform:
+                    ChangePlatformSize(true);
+                    break;
+                case EPowerUp.ReducePlatform:
+                    ChangePlatformSize(false);
+                    break;
+            }
+        }
+
+        private void ChangePlatformSize(bool isIncrease)
+        {
+            var value = isIncrease ? _powerUpData.PlatformSizeChange : -_powerUpData.PlatformSizeChange;
+            _platformView.ChangeSize(value);
         }
         
         public void Update()

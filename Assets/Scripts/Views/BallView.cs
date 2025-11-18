@@ -13,7 +13,7 @@ namespace Views
         {
             if (other.gameObject.layer != LayerMask.NameToLayer("Reflect"))
                 return;
-
+            
             OnTouch?.Invoke(other.contacts[0].normal);
         }
     }

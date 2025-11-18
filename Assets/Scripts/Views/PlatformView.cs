@@ -7,6 +7,7 @@ namespace Views
     {
         public Action<Vector2> OnPlatformReflect;
         
+        [field:SerializeField] public Transform BallPosition { get; private set; }
         [field:SerializeField] public BoxCollider2D Collider { get; private set; }
 
         private void OnCollisionEnter2D(Collision2D other)
@@ -15,6 +16,19 @@ namespace Views
                 return;
             
             OnPlatformReflect?.Invoke(other.transform.position);
+        }
+
+        public void ChangeSize(float newSize)
+        {
+            var scale = transform.localScale;
+            scale.x += newSize;
+            
+            if (scale.x < 1)
+            {
+                scale.x = 1;
+            }
+            
+            transform.localScale = scale;
         }
     }
 }

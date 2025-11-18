@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: PrefabData
   m_EditorClassIdentifier: 
   <BrickView>k__BackingField: {fileID: 1934644833176179839, guid: 521660df00b31bf4db4ec30562e65a7a, type: 3}
+  <PowerUpView>k__BackingField: {fileID: 5316503254335775609, guid: 7eb175965f738cb418c1e2d5f1ea2ca4, type: 3}
