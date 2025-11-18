@@ -14,4 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DefaultBallSpeed: 10
   PlatformSpeed: 3
-  MaxReflectAngle: 75
+  DestroyBlockCountPowerUp: 5
+  PowerUpFallSpeed: 2
+  MinBounceAngle: 0
+  MaxBounceAngle: 75

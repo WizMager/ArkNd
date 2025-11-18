@@ -29,6 +29,11 @@ namespace Views
             {
                 scale.x = 1;
             }
+
+            if (scale.x > 5.5f)
+            {
+                scale.x = 5.5f;
+            }
             
             transform.localScale = scale;
         }

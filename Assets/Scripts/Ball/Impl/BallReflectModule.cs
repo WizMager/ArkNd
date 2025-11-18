@@ -16,7 +16,11 @@ namespace Ball.Impl
         private readonly IInputService _inputService;
         private readonly LoseLineView _loseLineView;
         
+        private const float PenetrationOffset = 0.02f;
+        
         private Vector2 _lastVelocity;
+        private Vector2 _collisionVelocity;
+        private int _collisionFrame = -1;
         private float _halfPlatformWidth;
         private bool _isReadyForReflect;
 
@@ -43,11 +47,22 @@ namespace Ball.Impl
 
         private void OnReflected(Vector2 normal)
         {
-            var direction = _lastVelocity.normalized;
-            var reflected = Vector2.Reflect(direction, normal);
+            if (_collisionFrame != Time.frameCount)
+            {
+                _collisionFrame = Time.frameCount;
+                _collisionVelocity = _lastVelocity.sqrMagnitude > 0.0001f
+                    ? _lastVelocity
+                    : _rigidbody.linearVelocity.sqrMagnitude > 0.0001f ? _rigidbody.linearVelocity : Vector2.up;
+            }
 
-            _rigidbody.linearVelocity = reflected * _gameData.DefaultBallSpeed;
-            _lastVelocity = _rigidbody.linearVelocity;
+            var direction = _collisionVelocity.normalized;
+            var reflected = Vector2.Reflect(direction, normal);
+            var newVelocity = reflected * _gameData.DefaultBallSpeed;
+
+            _collisionVelocity = newVelocity;
+            _rigidbody.linearVelocity = newVelocity;
+            _lastVelocity = newVelocity;
+            _rigidbody.position += normal * PenetrationOffset;
         }
 
         private void OnPlatformReflected(Vector2 contactPoint)
