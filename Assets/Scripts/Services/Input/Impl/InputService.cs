@@ -4,7 +4,7 @@ using UnityEngine.InputSystem;
 
 namespace Services.Input.Impl
 {
-    public class InputService : IInputService, IDisposable
+    public class InputService : IInputService
     {
         private readonly InputSystem_Actions _inputSystemActions = new();
         

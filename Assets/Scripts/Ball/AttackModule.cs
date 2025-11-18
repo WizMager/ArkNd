@@ -6,7 +6,7 @@ using Services.Input;
 using UnityEngine;
 using Views;
 
-namespace Ball.Impl
+namespace Ball
 {
     public class AttackModule : IStartable, IDisposable
     {

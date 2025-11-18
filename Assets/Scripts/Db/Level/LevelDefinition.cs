@@ -1,33 +1,10 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using Utils;
 
-namespace Db
+namespace Db.Level
 {
-    [CreateAssetMenu(fileName = "LevelData", menuName = "Data/LevelData")]
-    public class LevelData : ScriptableObject
-    {
-        [SerializeField] private List<LevelDefinition> _levels = new();
-
-        public LevelDefinition GetLevel(int index)
-        {
-            if (_levels == null || _levels.Count == 0)
-            {
-                throw new InvalidOperationException("В базе уровней нет ни одной матрицы.");
-            }
-
-            if (index < 0 || index >= _levels.Count)
-            {
-                throw new ArgumentOutOfRangeException(nameof(index), $"Матрица с индексом {index} отсутствует. Доступно: {_levels.Count}");
-            }
-
-            return _levels[index];
-        }
-
-        public IReadOnlyList<LevelDefinition> Levels => _levels;
-    }
-
     [Serializable]
     public class LevelDefinition
     {
@@ -88,31 +65,4 @@ namespace Db
             return false;
         }
     }
-
-    [Serializable]
-    public class LegendEntry
-    {
-        [SerializeField] private char _symbol = '#';
-        [SerializeField] private bool _isEmpty;
-        [SerializeField] private BrickData _data;
-
-        public char Symbol => _symbol;
-        public bool IsEmpty => _isEmpty;
-        public BrickData Data => _data;
-    }
-
-    public readonly struct BrickSpawnInfo
-    {
-        public readonly int Row;
-        public readonly int Column;
-        public readonly BrickData Data;
-
-        public BrickSpawnInfo(int row, int column, BrickData data)
-        {
-            Row = row;
-            Column = column;
-            Data = data;
-        }
-    }
 }
-

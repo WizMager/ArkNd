@@ -6,7 +6,7 @@ using UnityEngine;
 using Views;
 using Random = UnityEngine.Random;
 
-namespace Ball.Impl
+namespace Ball
 {
     public class BallReflectModule : IAwakable, IFixedUpdatable, IDisposable
     {
